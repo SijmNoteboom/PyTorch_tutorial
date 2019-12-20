@@ -1,4 +1,7 @@
 import torch
+import pickle
 
-nw = torch.load(network, "C:/Projects/PyTorch_tutorial/model.pt")
-nw.eval()
+# model = torch.load(model, map_location="/home/cdac-user/PycharmProjects/PyTorch_tutorial/model.pt")
+vocab = Network(*args, **kwargs)
+vocab.load_state_dict(torch.load("/home/cdac-user/PycharmProjects/PyTorch_tutorial/vocab.pt"))
+vocab.eval()

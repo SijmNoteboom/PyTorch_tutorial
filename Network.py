@@ -118,7 +118,7 @@ in order to render the random behaviour of the first iteration of the network
     print(pred2)
 """
 
-torch.save(network, "\home\cdac-user\PycharmProjects\PyTorch_tutorial\model.pt")
-
+torch.save(network, r"\home\cdac-user\PycharmProjects\PyTorch_tutorial\model.pt")
+torch.save(network.state_dict(), r"\home\cdac-user\PycharmProjects\PyTorch_tutorial\vocab.pt")
 # model = torch.load(PATH)
 # model.eval()

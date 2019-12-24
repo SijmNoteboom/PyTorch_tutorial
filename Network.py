@@ -63,9 +63,8 @@ train_set = torchvision.datasets.FashionMNIST(
 
 
 network = Network()
-
-train_loader = torch.utils.data.DataLoader(train_set, batch_size=100)
 optimizer = optim.Adam(network.parameters(), lr=0.01)
+train_loader = torch.utils.data.DataLoader(train_set, batch_size=100, shuffle=True)
 
 
 for epoch in range(10):
@@ -118,7 +117,47 @@ in order to render the random behaviour of the first iteration of the network
     print(pred2)
 """
 
-torch.save(network, r"\home\cdac-user\PycharmProjects\PyTorch_tutorial\model.pt")
-torch.save(network.state_dict(), r"\home\cdac-user\PycharmProjects\PyTorch_tutorial\vocab.pt")
-# model = torch.load(PATH)
-# model.eval()
+total_correct/len(train_set)
+
+torch.save({'state_dict': network.state_dict()}, 'checkpoint.pth.tar')  #r"\home\cdac-user\PycharmProjects\PyTorch_tutorial\model.pt")
+
+len(train_set)
+
+len(train_set.targets)   #labels
+
+def get_all_preds(network, loader):
+    all_preds = torch.tensor([])
+    for batch in loader:
+        images, labels = batch
+
+        preds = model(images)
+        all_preds = torch.cat((all_preds, preds), dim = 0)
+    return all_preds
+
+
+prediction_loader = torch.utils.data.DataLoader(train_set, batch_size=10000)
+train_preds = get_all_preds(network, prediction_loader)
+
+with torch.no_grad():
+    prediction_loader = torch.utils.data.DataLoader(train_set, batch_size=10000)
+    train_preds = get_all_preds(network, prediction_loader)
+
+train_preds.grad
+train_preds.grad_fn
+
+preds_correct = get_num_correct(train_preds, train_set.targets)
+
+print('total correct:', preds_correct)
+print('accuracy:', preds_correct / len(train_set))
+
+stacked = torch.stack((train_set.targets, train_preds.argmax(dim=1)), dim=1)
+print(stacked.shape)
+print(stacked)
+
+stacked[0].tolist()
+
+cmt = torch.zeros(10,10, dtype=torch.int64)
+
+for p in stacked:
+    tl, pl = p.list()
+    cmt[tl, pl] = cmt[tl, pl] + 1
